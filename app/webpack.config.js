@@ -1,9 +1,10 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 
 const PATHS = {
-  src: path.join(__dirname, 'src'),
-  dist: path.join(__dirname, 'dist'),
+  src: path.join(__dirname, './src'),
+  dist: path.join(__dirname, './dist'),
 };
 
 const commonConfig = {
@@ -18,6 +19,7 @@ const commonConfig = {
     new HtmlWebpackPlugin({
       title: 'Webpack Project',
     }),
+    new FriendlyErrorsWebpackPlugin(),
   ],
 };
 
@@ -28,8 +30,11 @@ const developmentConfig = () => {
     devServer: {
       historyApiFallback: true,
       stats: 'errors-only',
-      host: process.env.HOST || 'localhost', // Defaults to `localhost`
-      port: process.env.PORT || 8080, // Defaults to 8080
+      hot: true,
+      inline: true,
+      quiet: true,
+      host: process.env.HOST || '0.0.0.0', // Defaults to `localhost`
+      port: process.env.DEV_PORT || 8080, // Defaults to 8080
     },
   };
   return Object.assign(

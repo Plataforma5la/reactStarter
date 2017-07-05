@@ -1,0 +1,35 @@
+version: '3'
+services:
+  # pg:
+  #   image: postgres:alpine
+  #   environment:
+  #     POSTGRES_USER: ${POSTGRES_USER}
+  #     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+  #     POSTGRES_DB: ${APP_NAME}
+  #   ports:
+  #     - "5432:5432"
+  # mongo:
+  #   image: mongo
+  #   ports:
+  #     - "27017:27017"
+  # redis:
+  #   image: redis
+  app:
+    env_file: .env
+    build:
+      context: .
+      dockerfile: ./config/Dockerfile
+      args:
+        APP_NAME: ${APP_NAME}
+        DEV_PORT: ${DEV_PORT}
+    command: npm start
+    environment:
+      NODE_PATH: ${NODE_PATH}
+    volumes:
+      - ./app/src:/usr/${APP_NAME}/src
+      - ./app/dist:/usr/${APP_NAME}/dist
+    ports:
+      - "8080:8080"
+    # links:
+      # - "redis:redis"
+      # - "mongo:mongo"
