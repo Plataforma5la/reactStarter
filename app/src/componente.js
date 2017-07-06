@@ -3,3 +3,4 @@ export default (text) => {
   element.innerHTML = text;
   return element;
 }
+

@@ -4,14 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server  --env development --hot --inline",
-    "preview": "webpack-dashboard -- webpack-dev-server --config ./webpack.config.js",
+    "start": "webpack-dev-server --inline --hot --env development",
     "build": "webpack --env production"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "babili-webpack-plugin": "^0.1.2",
     "friendly-errors-webpack-plugin": "^1.6.1",
     "html-webpack-plugin": "^2.29.0",
     "webpack": "^3.0.0",

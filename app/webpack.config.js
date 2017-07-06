@@ -29,9 +29,6 @@ const developmentConfig = () => {
   const config = {
     devServer: {
       historyApiFallback: true,
-      stats: 'errors-only',
-      hot: true,
-      inline: true,
       quiet: true,
       host: process.env.HOST || '0.0.0.0', // Defaults to `localhost`
       port: process.env.DEV_PORT || 8080, // Defaults to 8080

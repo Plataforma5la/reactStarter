@@ -72,7 +72,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__componente__ = __webpack_require__(1);
 
 
-document.body.appendChild(__WEBPACK_IMPORTED_MODULE_0__componente__["a" /* default */]('Adios, Mundo'));
+document.body.appendChild(__WEBPACK_IMPORTED_MODULE_0__componente__["a" /* default */]('Hola, Mundo'));
 
 
 /***/ }),
@@ -85,6 +85,7 @@ document.body.appendChild(__WEBPACK_IMPORTED_MODULE_0__componente__["a" /* defau
   element.innerHTML = text;
   return element;
 });
+
 
 
 /***/ })
