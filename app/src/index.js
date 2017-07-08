@@ -1,3 +1,5 @@
 import componente from './componente';
 
-document.body.appendChild(componente('Hola, Mundo'));
+require('./estilo.styl');
+
+document.body.appendChild(componente('Hello, Nepo.'));
