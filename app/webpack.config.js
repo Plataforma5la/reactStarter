@@ -40,15 +40,48 @@ const commonConfig = {
         },
       },
     }, {
-      test: /\.png$/,
+    }, {
+      test: /\.(jpe?g|png)$/i,
       loaders: [
-        'url-loader?limit=10000!?name=public/[hash].[ext]',
+        'url-loader?limit=10000!?name=./[hash].[ext]',
+        //'webp-loader', // Still not supported by all browsers
       ],
+    }, {
+      test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+      loader: 'url-loader?limit=10000&minetype=application/font-woff',
+    },
+    {
+      test: /\.(ttf|eot|svg|gif)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+      loader: 'file-loader',
     }],
   },
   plugins: [
     new HtmlWebpackPlugin({
+      inject: false,
+      template: require('html-webpack-template'),
       title: 'Webpack Project',
+      appMountId: 'app',
+      mobile: true,
+      links: [
+        'https://fonts.googleapis.com/css?family=Roboto+Condensed:300',
+        {
+          href: 'manifest',
+          rel: '/manifest.json',
+        },
+        'styles.css',
+      ],
+      meta: [
+        {
+          name: 'description',
+          content: 'Add Description.',
+        }, {
+          name: 'keywords',
+          content: 'Add keywords here.',
+        }, {
+          name: 'theme-color',
+          content: '#c50c3f',
+        },
+      ],
     }),
     new FriendlyErrorsWebpackPlugin(),
   ],
@@ -59,7 +92,7 @@ const productionConfig = () => {
     test: /\.css$/,
     use: ExtractTextPlugin.extract({
       fallback: 'style-loader',
-      use: cssLoader,
+      use: 'css-loader',
     }),
   }, {
     test: /\.styl$/,
@@ -95,7 +128,7 @@ const developmentConfig = () => {
     test: /\.css$/,
     use: [
       'style-loader',
-      cssLoader,
+      'css-loader',
     ],
   }, {
     test: /\.styl$/,
@@ -110,6 +143,7 @@ const developmentConfig = () => {
     devServer: {
       historyApiFallback: true,
       quiet: true,
+      disableHostCheck: true,
       host: process.env.HOST || '0.0.0.0', // Defaults to `localhost`
       port: process.env.DEV_PORT || 8080, // Defaults to 8080
     },
