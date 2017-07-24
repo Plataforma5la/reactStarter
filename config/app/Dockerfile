@@ -1,4 +1,4 @@
-FROM node:alpine
+FROM node:slim
 
 ARG APP_NAME
 RUN mkdir /usr/$APP_NAME

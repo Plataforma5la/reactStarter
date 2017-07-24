@@ -68,7 +68,6 @@ const commonConfig = {
           href: 'manifest',
           rel: '/manifest.json',
         },
-        'styles.css',
       ],
       meta: [
         {
