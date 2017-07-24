@@ -9,11 +9,22 @@ services:
      - NGINX_PORT=80
     ports:
       - "80:80"
+  api:
+    build:
+      context: .
+      dockerfile: ./config/api/Dockerfile
+    command: npm start
+    environment:
+      NODE_PATH: ${NODE_PATH}
+    volumes:
+      - ./api/src:/usr/api/src
+    ports:
+      - "3000:3000"
   app:
     env_file: .env
     build:
       context: .
-      dockerfile: ./config/Dockerfile
+      dockerfile: ./config/app/Dockerfile
       args:
         APP_NAME: ${APP_NAME}
     command: npm run build
