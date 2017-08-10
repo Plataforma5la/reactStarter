@@ -1,0 +1,18 @@
+{
+  "parser": "babel-eslint",
+  "env": {
+    "browser": true,
+    "node": true,
+    "es6": true
+  },
+  "extends": ["airbnb", "plugin:flowtype/recommended"],
+  "plugins": ["react", "flowtype"],
+  "settings": {
+    "import/resolver": "webpack"
+  },
+  "rules": {
+     "no-param-reassign": 0,
+	   "no-underscore-dangle": 0,
+     "react/forbid-prop-types": 0
+   }
+}

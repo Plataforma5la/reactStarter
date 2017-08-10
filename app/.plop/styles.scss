@@ -1,0 +1,7 @@
+.{{ properCase name }} {
+  color: #444;
+
+  &.--variant{
+    color: red;
+  }
+}

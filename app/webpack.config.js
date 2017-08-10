@@ -8,8 +8,8 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const cssnano = require('cssnano');
 
 const PATHS = {
-  src: path.join(__dirname, './src'),
-  dist: path.join(__dirname, './dist'),
+  src: path.resolve(__dirname, './src'),
+  dist: path.resolve(__dirname, './dist'),
 };
 
 const cssLoader = {
@@ -18,12 +18,30 @@ const cssLoader = {
     modules: true,
     localIdentName: '[path][name]__[local]--[hash:base64:5]',
     camelCase: true,
+    ignore: '/node_modules/',
+    url: false,
   },
 };
 
 const commonConfig = {
   entry: {
     src: PATHS.src,
+  },
+  resolve: {
+    alias: {
+      // react: 'preact-compat',
+      // 'react-dom': 'preact-compat',
+      Components: path.resolve(__dirname, 'src/components/'),
+      Containers: path.resolve(__dirname, 'src/containers/'),
+      Utils: path.resolve(__dirname, 'src/utils/'),
+      Config: path.resolve(__dirname, 'src/config/'),
+      Actions: path.resolve(__dirname, 'src/redux/actions/'),
+      Reducers: path.resolve(__dirname, 'src/redux/reducers/'),
+      Assets: path.resolve(__dirname, 'src/assets/'),
+      Store: path.resolve(__dirname, 'src/redux/store.js'),
+      Globals: path.resolve(__dirname, 'src/globals/'),
+    },
+    extensions: ['.jsx', '.js', '.scss'],
   },
   output: {
     path: PATHS.dist,
@@ -40,19 +58,19 @@ const commonConfig = {
         },
       },
     }, {
-    }, {
       test: /\.(jpe?g|png)$/i,
       loaders: [
-        'url-loader?limit=10000!?name=./[hash].[ext]',
-        //'webp-loader', // Still not supported by all browsers
+        'url-loader?limit=1000!?name=./[hash].[ext]',
+        // 'webp-loader', // Still not supported by all browsers
       ],
+      exclude: /(node_modules|bower_components)/,
     }, {
       test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-      loader: 'url-loader?limit=10000&minetype=application/font-woff',
+      loader: 'url-loader?limit=1000&mimetype=application/font-woff',
     },
     {
       test: /\.(ttf|eot|svg|gif)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-      loader: 'file-loader',
+      loader: 'url-loader?limit=1000&mimetype=application/font-woff',
     }],
   },
   plugins: [
@@ -99,7 +117,14 @@ const productionConfig = () => {
       fallback: 'style-loader',
       use: [cssLoader, 'stylus-loader'],
     }),
+  }, {
+    test: /\.scss$/,
+    use: ExtractTextPlugin.extract({
+      fallback: 'style-loader',
+      use: [cssLoader, 'sass-loader'],
+    }),
   }];
+
   const productionPlugins = [
     new ExtractTextPlugin('styles.css'),
     new CleanWebpackPlugin(PATHS.dist),
@@ -135,6 +160,13 @@ const developmentConfig = () => {
       'style-loader',
       cssLoader,
       'stylus-loader',
+    ],
+  }, {
+    test: /\.scss$/,
+    use: [
+      'style-loader',
+      cssLoader,
+      'sass-loader',
     ],
   }];
   commonConfig.module.rules.push(...rules);

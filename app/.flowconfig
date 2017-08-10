@@ -1,0 +1,25 @@
+[ignore]
+
+[include]
+
+[libs]
+
+[options]
+module.file_ext=.js
+module.file_ext=.jsx
+module.file_ext=.json
+module.file_ext=.styl
+module.name_mapper='Components' ->'<PROJECT_ROOT>/src/components'
+module.name_mapper='Containers' ->'<PROJECT_ROOT>/src/containers'
+module.name_mapper='Utils' ->'<PROJECT_ROOT>/src/utils'
+module.name_mapper='Config' ->'<PROJECT_ROOT>/src/config'
+module.name_mapper='Actions' ->'<PROJECT_ROOT>/src/redux/actions'
+module.name_mapper='Reducers' ->'<PROJECT_ROOT>/src/redux/reducers'
+module.name_mapper='Assets' ->'<PROJECT_ROOT>/src/assets'
+module.name_mapper='Store' ->'<PROJECT_ROOT>/src/redux/store.js'
+module.name_mapper='Globals' ->'<PROJECT_ROOT>/src/globals'
+
+
+
+
+[lints]
