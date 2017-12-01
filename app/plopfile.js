@@ -48,7 +48,7 @@ module.exports = function (plop) {
     }],
   });
 
-  plop.setGenerator('connected', {
+  plop.setGenerator('container', {
     description: 'this creates a new connected Component',
     prompts: [{
       type: 'input',

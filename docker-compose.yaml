@@ -5,21 +5,19 @@ services:
     volumes:
       - ./app/dist/:/var/www/
       - ./config/nginx.conf:/etc/nginx/conf.d/default.conf
-    environment:
-     - NGINX_PORT=80
+    env_file: ./.env
     ports:
-      - "80:80"
+      - "${NGINX_PORT}:${NGINX_PORT}"
   api:
     build:
       context: .
       dockerfile: ./config/api/Dockerfile
     command: npm start
-    environment:
-      NODE_PATH: ${NODE_PATH}
+    env_file: ./.env
     volumes:
       - ./api/src:/usr/api/src
     ports:
-      - "3000:3000"
+      - "${API_PORT}:3000"
   app:
     env_file: .env
     build:
@@ -28,8 +26,7 @@ services:
       args:
         APP_NAME: ${APP_NAME}
     command: npm run build
-    environment:
-      NODE_PATH: ${NODE_PATH}
+    env_file: ./.env
     volumes:
       - ./app/src:/usr/${APP_NAME}/src
       - ./app/dist:/usr/${APP_NAME}/dist

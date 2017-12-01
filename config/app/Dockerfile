@@ -6,4 +6,5 @@ ARG APP_NAME
 WORKDIR /usr/$APP_NAME
 COPY ./app/package.json package.json
 RUN npm install
+ADD ./app/.babelrc .babelrc
 ADD ./app/webpack.config.js webpack.config.js

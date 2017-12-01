@@ -1,0 +1,4 @@
+// .babelrc
+{
+  "presets": ["react", "stage-0", "flow"]
+}

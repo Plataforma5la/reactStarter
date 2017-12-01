@@ -8,6 +8,8 @@
 // load the default config generator.
 const myConfig = require('../webpack.config.js')('development');
 const path = require('path');
+const FlowStatusWebpackPlugin = require('flow-status-webpack-plugin');
+const webpack = require('webpack');
 
 module.exports = (config) => {
   // Extend it as you need.
@@ -17,6 +19,7 @@ module.exports = (config) => {
     test: /\.json$/,
     loader: 'json-loader',
   });
+  config.devtool = 'source-map';
   config.module.rules.forEach((rule) => { rule.include = path.resolve(__dirname, '../'); });
   config.module.rules.forEach((rule) => { rule.exclude = path.resolve(__dirname, '../node_modules'); });
   config.resolve.extensions.push('.json');
@@ -27,7 +30,6 @@ module.exports = (config) => {
     'react/lib/ReactContext': 'window',
     'react/addons': true,
   };
-
   // this is used by our custome `rr.js` module
   config.resolve.alias['react-router-original'] = require.resolve('react-router');
   // this `rr.js` will replace the Link with a our own mock component.

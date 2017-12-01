@@ -1,5 +1,10 @@
-import componente from './componente';
+import { render } from 'react-dom';
+import React from 'react';
 
-require('./estilo.styl');
+import Prueba from 'Components/Prueba';
 
-document.body.appendChild(componente('Hello, Nepo.'));
+const Root = () => (
+  <Prueba />
+);
+
+render(<Root />, document.getElementById('app'));

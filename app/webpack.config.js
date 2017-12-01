@@ -6,10 +6,12 @@ const BabiliPlugin = require('babili-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const cssnano = require('cssnano');
+const webpack = require('webpack');
+const createMinifier = require("css-loader-minify-class");
 
 const PATHS = {
-  src: path.resolve(__dirname, './src'),
-  dist: path.resolve(__dirname, './dist'),
+  src: path.join(__dirname, './src'),
+  dist: path.join(__dirname, './dist'),
 };
 
 const cssLoader = {
@@ -19,33 +21,31 @@ const cssLoader = {
     localIdentName: '[path][name]__[local]--[hash:base64:5]',
     camelCase: true,
     ignore: '/node_modules/',
-    url: false,
   },
 };
 
 const commonConfig = {
   entry: {
-    src: PATHS.src,
+    src: './src/index.js',
   },
   resolve: {
     alias: {
       // react: 'preact-compat',
       // 'react-dom': 'preact-compat',
-      Components: path.resolve(__dirname, 'src/components/'),
-      Containers: path.resolve(__dirname, 'src/containers/'),
-      Utils: path.resolve(__dirname, 'src/utils/'),
-      Config: path.resolve(__dirname, 'src/config/'),
-      Actions: path.resolve(__dirname, 'src/redux/actions/'),
-      Reducers: path.resolve(__dirname, 'src/redux/reducers/'),
-      Assets: path.resolve(__dirname, 'src/assets/'),
-      Store: path.resolve(__dirname, 'src/redux/store.js'),
-      Globals: path.resolve(__dirname, 'src/globals/'),
+      // 'create-react-class': 'preact-compat/lib/create-react-class',
+      Components: path.resolve(__dirname, './src/components/'),
+      Containers: path.resolve(__dirname, './src/containers/'),
+      Utils: path.resolve(__dirname, './src/utils/'),
+      Paginas: path.resolve(__dirname, './src/paginas/'),
+      Assets: path.resolve(__dirname, './assets/'),
+      Data: path.resolve(__dirname, './src/data/'),
     },
-    extensions: ['.jsx', '.js', '.scss'],
+    extensions: ['.jsx', '.js', '.json', '.styl', '.css'],
   },
   output: {
     path: PATHS.dist,
-    filename: '[name][hash:8].js',
+    filename: 'bundle[hash].js',
+    publicPath: '/',
   },
   module: {
     rules: [{
@@ -53,79 +53,50 @@ const commonConfig = {
       exclude: /(node_modules|bower_components)/,
       use: {
         loader: 'babel-loader',
-        options: {
-          presets: ['env', 'es2015', 'react'],
-        },
       },
     }, {
       test: /\.(jpe?g|png)$/i,
       loaders: [
-        'url-loader?limit=1000!?name=./[hash].[ext]',
-        // 'webp-loader', // Still not supported by all browsers
+        'url-loader?limit=10000!?name=./[hash].[ext]',
+        //'webp-loader',
       ],
-      exclude: /(node_modules|bower_components)/,
     }, {
       test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-      loader: 'url-loader?limit=1000&mimetype=application/font-woff',
+      loader: 'url-loader?limit=10000&minetype=application/font-woff',
     },
     {
       test: /\.(ttf|eot|svg|gif)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-      loader: 'url-loader?limit=1000&mimetype=application/font-woff',
+      loader: 'file-loader',
     }],
   },
   plugins: [
-    new HtmlWebpackPlugin({
-      inject: false,
-      template: require('html-webpack-template'),
-      title: 'Webpack Project',
-      appMountId: 'app',
-      mobile: true,
-      links: [
-        'https://fonts.googleapis.com/css?family=Roboto+Condensed:300',
-        {
-          href: 'manifest',
-          rel: '/manifest.json',
-        },
-      ],
-      meta: [
-        {
-          name: 'description',
-          content: 'Add Description.',
-        }, {
-          name: 'keywords',
-          content: 'Add keywords here.',
-        }, {
-          name: 'theme-color',
-          content: '#c50c3f',
-        },
-      ],
-    }),
-    new FriendlyErrorsWebpackPlugin(),
+  
   ],
 };
 
 const productionConfig = () => {
+  // Adds ClassName Minifier
+  cssLoader.options.minimize = true;
+  cssLoader.options.getLocalIdent = createMinifier();
   const rules = [{
     test: /\.css$/,
     use: ExtractTextPlugin.extract({
-      fallback: 'style-loader',
-      use: 'css-loader',
+      use: ['css-loader', 'style-loader'],
     }),
   }, {
     test: /\.styl$/,
     use: ExtractTextPlugin.extract({
-      fallback: 'style-loader',
       use: [cssLoader, 'stylus-loader'],
     }),
-  }, {
-    test: /\.scss$/,
-    use: ExtractTextPlugin.extract({
-      fallback: 'style-loader',
-      use: [cssLoader, 'sass-loader'],
-    }),
   }];
-
   const productionPlugins = [
+    new webpack.DefinePlugin({ 
+      'process.env': { NODE_ENV: "'production'" },
+    }),
+    new HtmlWebpackPlugin({
+      inject: 'body',
+      template: './src/index.html',
+    }),
     new ExtractTextPlugin('styles.css'),
     new CleanWebpackPlugin(PATHS.dist),
     new BabiliPlugin(),
@@ -153,6 +124,7 @@ const developmentConfig = () => {
     use: [
       'style-loader',
       'css-loader',
+      'sass-loader',
     ],
   }, {
     test: /\.styl$/,
@@ -169,12 +141,41 @@ const developmentConfig = () => {
       'sass-loader',
     ],
   }];
+  const developmentPlugins = [
+    new HtmlWebpackPlugin({
+      inject: false,
+      template: require('html-webpack-template'),
+      title: 'Webpack Project',
+      appMountId: 'app',
+      mobile: true,
+      links: [
+        'https://fonts.googleapis.com/css?family=Roboto+Condensed:300',
+        {
+          href: 'manifest',
+          rel: '/manifest.json',
+        },
+      ],
+      meta: [
+        {
+          name: 'description',
+          content: 'Add Description.',
+        }, {
+          name: 'keywords',
+          content: 'Add keywords here.',
+        }, {
+          name: 'theme-color',
+          content: '#c50c3f',
+        },
+      ],
+    }),
+  ];
   commonConfig.module.rules.push(...rules);
+  commonConfig.plugins.push(...developmentPlugins);
+  commonConfig.devtool = 'source-map';
   const config = {
     devServer: {
       historyApiFallback: true,
       quiet: true,
-      disableHostCheck: true,
       host: process.env.HOST || '0.0.0.0', // Defaults to `localhost`
       port: process.env.DEV_PORT || 8080, // Defaults to 8080
     },
@@ -187,6 +188,7 @@ const developmentConfig = () => {
 
 
 module.exports = (env) => {
+  console.log(env)
   if (env === 'production') {
     return productionConfig();
   }

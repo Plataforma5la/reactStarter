@@ -1,5 +1,12 @@
 [ignore]
 
+  .*/.plop/.*
+  .*/node_modules/eslint-plugin-jsx-a11y/.*
+  .*/node_modules/aphrodite/.*
+  .*/node_modules/radium/.*
+  .*/node_modules/immutable/dist/.*
+  .*/node_modules/editions/es2015/.*
+
 [include]
 
 [libs]
@@ -18,8 +25,4 @@ module.name_mapper='Reducers' ->'<PROJECT_ROOT>/src/redux/reducers'
 module.name_mapper='Assets' ->'<PROJECT_ROOT>/src/assets'
 module.name_mapper='Store' ->'<PROJECT_ROOT>/src/redux/store.js'
 module.name_mapper='Globals' ->'<PROJECT_ROOT>/src/globals'
-
-
-
-
-[lints]
+module.name_mapper='Interfaces' ->'<PROJECT_ROOT>/src/interfaces.js'
