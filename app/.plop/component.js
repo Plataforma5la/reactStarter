@@ -1,6 +1,6 @@
 /* @flow */
 import React from 'react'
-import styles from './{{ properCase name }}.styl'
+import s from './{{ properCase name }}.styl'
 
 const {{ properCase name }} = ({
   name = 'Anonimo'
